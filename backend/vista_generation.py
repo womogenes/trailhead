@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv  # Ensure you've installed python-dotenv: pip install python-dotenv
 from supabase import create_client, Client
 from pydantic import BaseModel
-from openai import OpenAI
 from gpt import GPTInterface
 import re
 
@@ -103,7 +102,7 @@ nodes = get_trail_node_ids(trailhead_id, supabase)
 nodes = parse_trail(nodes, supabase)
 
 response = generate_next_topics_prompt(nodes, gpt_interface)
-# print(type(response))
+
 response = extract_topics(response.response)
 
 print(response)

@@ -14,7 +14,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 from openai import OpenAI
 
 class GPTInterface:
-    def __init__(self, api_key: str = None, model: str = "gpt-4o-mini"):
+    def __init__(self, api_key: str = None, model: str = "o3-mini"):
         self.client = GPTClient(api_key=api_key)
         self.model = model
 
@@ -44,6 +44,7 @@ class GPTInterface:
         # Send the request to GPT
         response = self.client.chat.completions.create(
             model=self.model,
+            reasoning_effort="low",
             messages=[
                 {"role": "system", "content": system_role},
                 {"role": "user", "content": f"Ask: {prompt} Analyze the following data: {data}"}
