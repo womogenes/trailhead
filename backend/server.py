@@ -23,15 +23,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
-    input = [{ 'content': "I want to learn about poker", 'role': "user" }]
-    my_query = input[0]['content'] #change later when integrating with front-end
-    input2 = [{ 'content': "I have never played poker before, but want to play with friends", 'role': "user" }]
-    my_query2 = input2[0]['content'] #change later when integrating with front-end
+@app.post("/api/chat")
+async def chat(request: Request):
+    chat_history = await request.json()
+    
+    if len(chat_history) <= 1:
+        return generate_prereqs(chat_history[0]['content'])
 
-    return {"message": generate_prereqs(my_query)}
+    if len(chat_history) <= 3:
+        return get_learning_goal(chat_history)
 
+    if len(chat_history) <= 5:
+        return gather_additional_info(chat_history)
+
+    # Submit the final request
+    return generate_query_from_transcript(chat_history)
 
 def generate_prereqs(data):
     """
