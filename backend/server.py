@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -9,13 +10,19 @@ from typing import List
 from gpt import GPTInterface
 from dotenv import load_dotenv
 import os
-from fastapi import Request
 
 load_dotenv()
 # Load API key from environment variables instead of hardcoding
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/api/chat")
 async def chat(request: Request):
