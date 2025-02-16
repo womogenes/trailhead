@@ -51,4 +51,4 @@ def tutorials(topic,media):
     print(res)
     return res
 
-tutorials("oil painting",["videos","tutorials","images"])
+#tutorials("oil painting",["videos","tutorials","images"])
