@@ -33,7 +33,7 @@ export default function RootLayout({
           {/* Left sidebar */}
           <Navbar />
 
-          <div className="bg-background my-2 mr-2 w-full overflow-auto rounded-md">
+          <div className="bg-background my-2 mr-2 w-full overflow-auto rounded-md shadow-sm">
             {children}
           </div>
         </div>

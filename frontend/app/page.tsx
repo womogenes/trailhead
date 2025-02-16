@@ -5,12 +5,13 @@ import Tag from '@/components/tag';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import { ArrowUpIcon, Loader2 } from 'lucide-react';
+import { ArrowUpIcon, Loader2, MountainIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import evergreenTree from '@/public/evergreen_tree.png';
+import { cn } from '@/lib/utils';
+import { Progress } from '@/components/progress-bar';
 
 type ChatMessage = {
   content: string;
@@ -46,7 +47,7 @@ export default function Home() {
     setChatHistory([...newChatHistory, response]);
     setIsWaiting(false);
     setQuery('');
-    queryInputRef.current?.focus();
+    setTimeout(() => queryInputRef.current?.focus(), 100);
   };
 
   useEffect(() => {
@@ -57,40 +58,84 @@ export default function Home() {
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-white">
       {/* Trees on the sides */}
       <motion.div
-  className="absolute bottom-0 left-[1%]"
-  animate={{ opacity: chatHistory.length > 0 ? 0 : 1, x: chatHistory.length > 0 ? -20 : [0, -5, 0], rotate: chatHistory.length > 0 ? 0 : [0, 1, 0] }}
-  transition={{ duration: 1, ease: "easeOut" }}
->
-  <Image src={evergreenTree} alt="Left Tree" width={140} height={200} priority />
-</motion.div>
+        className="absolute bottom-0 left-[1%]"
+        animate={{
+          opacity: chatHistory.length > 0 ? 0 : 1,
+          x: chatHistory.length > 0 ? -20 : [0, -5, 0],
+          rotate: chatHistory.length > 0 ? 0 : [0, 1, 0],
+        }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      >
+        <Image
+          src={evergreenTree}
+          alt="Left Tree"
+          width={140}
+          height={200}
+          priority
+        />
+      </motion.div>
 
-<motion.div
-  className="absolute bottom-0 left-[10%]"
-  animate={{ opacity: chatHistory.length > 0 ? 0 : 1, x: chatHistory.length > 0 ? -20 : [0, -3, 0], rotate: chatHistory.length > 0 ? 0 : [0, 0.5, 0] }}
-  transition={{ duration: 1, ease: "easeOut" }}
->
-  <Image src={evergreenTree} alt="Left Tree 2" width={100} height={160} priority />
-</motion.div>
+      <motion.div
+        className="absolute bottom-0 left-[10%]"
+        animate={{
+          opacity: chatHistory.length > 0 ? 0 : 1,
+          x: chatHistory.length > 0 ? -20 : [0, -3, 0],
+          rotate: chatHistory.length > 0 ? 0 : [0, 0.5, 0],
+        }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      >
+        <Image
+          src={evergreenTree}
+          alt="Left Tree 2"
+          width={100}
+          height={160}
+          priority
+        />
+      </motion.div>
 
-<motion.div
-  className="absolute bottom-0 right-[1%]"
-  animate={{ opacity: chatHistory.length > 0 ? 0 : 1, x: chatHistory.length > 0 ? 20 : [0, 5, 0], rotate: chatHistory.length > 0 ? 0 : [0, -1, 0] }}
-  transition={{ duration: 1, ease: "easeOut" }}
->
-  <Image src={evergreenTree} alt="Right Tree" width={140} height={200} priority />
-</motion.div>
+      <motion.div
+        className="absolute bottom-0 right-[1%]"
+        animate={{
+          opacity: chatHistory.length > 0 ? 0 : 1,
+          x: chatHistory.length > 0 ? 20 : [0, 5, 0],
+          rotate: chatHistory.length > 0 ? 0 : [0, -1, 0],
+        }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      >
+        <Image
+          src={evergreenTree}
+          alt="Right Tree"
+          width={140}
+          height={200}
+          priority
+        />
+      </motion.div>
 
-<motion.div
-  className="absolute bottom-0 right-[10%]"
-  animate={{ opacity: chatHistory.length > 0 ? 0 : 1, x: chatHistory.length > 0 ? 20 : [0, 3, 0], rotate: chatHistory.length > 0 ? 0 : [0, -0.5, 0] }}
-  transition={{ duration: 1, ease: "easeOut" }}
->
-  <Image src={evergreenTree} alt="Right Tree 2" width={100} height={160} priority />
-</motion.div>
-
+      <motion.div
+        className="absolute bottom-0 right-[10%]"
+        animate={{
+          opacity: chatHistory.length > 0 ? 0 : 1,
+          x: chatHistory.length > 0 ? 20 : [0, 3, 0],
+          rotate: chatHistory.length > 0 ? 0 : [0, -0.5, 0],
+        }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      >
+        <Image
+          src={evergreenTree}
+          alt="Right Tree 2"
+          width={100}
+          height={160}
+          priority
+        />
+      </motion.div>
 
       {/* Main content */}
-      <div className="flex w-full max-w-xl flex-col gap-4 py-4">
+      <div
+        className={cn(
+          chatHistory.length > 0 && 'h-full',
+          'flex w-full max-w-xl flex-col gap-4 py-4',
+        )}
+      >
         {chatHistory.length === 0 && (
           <h1 className="mb-4 text-center text-3xl font-medium">
             What would you like to learn?
@@ -116,26 +161,34 @@ export default function Home() {
                 </div>
               )}
             </div>
+
+            {chatHistory.length >= 8 && (
+              <div className="mx-auto mt-4 flex w-40 flex-col items-center">
+                <MountainIcon className="animate-pulse" />
+                <p className="text-foreground mb-1 text-sm">hang tight!</p>
+                <Progress isAnimating={true} />
+              </div>
+            )}
           </>
         )}
 
         <div className="relative mt-auto h-24">
           <Textarea
-            className="absolute h-full resize-none rounded-2xl bg-transparent px-4 py-3 focus-visible:ring-0"
+            className="bg-background absolute h-full resize-none rounded-2xl px-4 py-3 focus-visible:ring-0"
             placeholder={
               chatHistory.length <= 1
                 ? 'I want to...'
                 : chatHistory.length <= 3
-                ? 'What are you familiar with already? e.g. 1, 2, 5'
-                : chatHistory.length <= 5
-                ? "What's your main goal or objective?"
-                : 'Add additional info...'
+                  ? 'What are you familiar with already? e.g. 1, 2, 5'
+                  : chatHistory.length <= 5
+                    ? "What's your main goal or objective?"
+                    : 'Add additional info...'
             }
             spellCheck="false"
             autoComplete="off"
             ref={queryInputRef}
             value={query}
-            disabled={isWaiting}
+            disabled={isWaiting || chatHistory.length >= 8}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && submitQuery()}
           />
@@ -151,9 +204,18 @@ export default function Home() {
 
         {chatHistory.length === 0 && (
           <div className="flex flex-wrap gap-2">
-            <Tag onClick={() => setQuery('get good at poker')} label="get good at poker" />
-            <Tag onClick={() => setQuery('make a killer lasagna')} label="make a killer lasagna" />
-            <Tag onClick={() => setQuery('play magic the gathering')} label="play magic the gathering" />
+            <Tag
+              onClick={() => setQuery('get good at poker')}
+              label="get good at poker"
+            />
+            <Tag
+              onClick={() => setQuery('make a killer lasagna')}
+              label="make a killer lasagna"
+            />
+            <Tag
+              onClick={() => setQuery('play magic the gathering')}
+              label="play magic the gathering"
+            />
           </div>
         )}
       </div>
