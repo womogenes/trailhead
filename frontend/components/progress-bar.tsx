@@ -3,7 +3,7 @@ import React from 'react';
 
 export const Progress = ({ isAnimating, animationDuration }: any) => {
   const { isFinished, progress } = useNProgress({
-    animationDuration: 20,
+    animationDuration,
     isAnimating,
   });
 

@@ -11,10 +11,12 @@ import Image from 'next/image';
 import evergreenTree from '@/public/evergreen_tree.png';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/progress-bar';
+import { useRouter } from 'next/navigation';
 
 type ChatMessage = {
   content: string;
   role: 'user' | 'assistant';
+  trailheadId?: string;
 };
 
 export default function Home() {
@@ -22,6 +24,7 @@ export default function Home() {
   const [isWaiting, setIsWaiting] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const queryInputRef = useRef<any>(null);
+  const router = useRouter();
 
   const submitQuery = async () => {
     if (query.trim() === '') return;
@@ -42,6 +45,11 @@ export default function Home() {
     ).json();
 
     console.log(response);
+    if (response.trailheadId) {
+      router.push(`/trails?trailhead-id=${response.trailheadId}`);
+      router.refresh();
+      return;
+    }
 
     setChatHistory([...newChatHistory, response]);
     setIsWaiting(false);
@@ -175,11 +183,14 @@ export default function Home() {
               )}
             </div>
 
-            {chatHistory.length >= 8 && (
-              <div className="mx-auto mt-4 flex w-40 flex-col items-center">
-                <MountainIcon className="animate-pulse" />
-                <p className="text-foreground mb-1 text-sm">hang tight!</p>
-                <Progress isAnimating={true} />
+            {chatHistory.length >= 7 && (
+              <div className="mx-auto mt-4 flex w-56 flex-col items-center">
+                <MountainIcon className="text-primary animate-pulse" />
+                <p className="text-foreground my-2 text-center text-sm">
+                  hang tight! generating your hike... (this can take a minute or
+                  two)
+                </p>
+                <Progress isAnimating={true} animationDuration={120} />
               </div>
             )}
           </>
