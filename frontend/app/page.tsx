@@ -54,6 +54,20 @@ export default function Home() {
     queryInputRef.current?.focus();
   }, [queryInputRef]);
 
+  function Tag({ label }: { label: string }) {
+    return (
+      <button
+        className="bg-muted text-muted-foreground hover:bg-primary hover:text-muted rounded-full px-3 py-1 transition-colors"
+        onClick={() => {
+          setQuery(label);
+          queryInputRef.current?.focus();
+        }}
+      >
+        {label}
+      </button>
+    );
+  }
+
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-white">
       {/* Trees on the sides */}
@@ -189,7 +203,9 @@ export default function Home() {
             ref={queryInputRef}
             value={query}
             disabled={isWaiting || chatHistory.length >= 8}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && submitQuery()}
           />
           <Button
@@ -204,18 +220,9 @@ export default function Home() {
 
         {chatHistory.length === 0 && (
           <div className="flex flex-wrap gap-2">
-            <Tag
-              onClick={() => setQuery('get good at poker')}
-              label="get good at poker"
-            />
-            <Tag
-              onClick={() => setQuery('make a killer lasagna')}
-              label="make a killer lasagna"
-            />
-            <Tag
-              onClick={() => setQuery('play magic the gathering')}
-              label="play magic the gathering"
-            />
+            <Tag label="get good at poker" />
+            <Tag label="make a killer lasagna" />
+            <Tag label="play magic the gathering" />
           </div>
         )}
       </div>

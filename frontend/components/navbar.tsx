@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { GlobeIcon, MilestoneIcon } from 'lucide-react';
+import { BookOpenIcon, MilestoneIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import Link from 'next/link';
@@ -18,8 +18,8 @@ export default function Navbar() {
       {/* Tabs */}
       <div className="mt-8 flex flex-col px-1">
         <Tab href="/">
-          <GlobeIcon size={16} />
-          <span>Discover</span>
+          <BookOpenIcon size={16} />
+          <span>Learn</span>
         </Tab>
         <Tab href="/trails">
           <MilestoneIcon size={16} />
@@ -39,7 +39,7 @@ function Tab({ children, href }: { children: React.ReactNode; href: string }) {
     <Link
       className={cn(
         pathname === href && 'text-primary font-medium',
-        'flex items-center gap-2 rounded-sm px-4 py-2 transition-colors hover:bg-black/5',
+        'flex items-center gap-3 rounded-sm px-4 py-2 transition-colors hover:bg-black/5',
       )}
       href={href}
     >
