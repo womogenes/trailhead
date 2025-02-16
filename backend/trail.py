@@ -35,11 +35,9 @@ class Trail:
         if edge[1] not in self.edges:
             self.edges[edge[1]] = set()
 
-
 class Hike:
     class Output(BaseModel):
             response: str
-
 
     def __init__(self, trailhead_id: str, url: str = None, key: str = None):
         self.trailhead_id = trailhead_id
@@ -201,7 +199,7 @@ class Hike:
             return new_topics[1], new_topics[2:]
 
 
-    def generate_node(self, title: str, node_id: str) -> Node:
+    def generate_node(self, title: str) -> Node:
         system_role = f"""
         You are currently creating an article about a new topic that they've never learned before. The article should be concise and informative, being around a paragraph in length,
         and be understandable for someone who is new to the topic. Furthermore, the article should be very focused and not contain any irrelevant information.
@@ -222,8 +220,9 @@ class Hike:
         }
 
         response = self.db.from_("resources").insert(payload).execute()
-
-        return Node(node_id, title, description)
+        new_resource = response.data[0] if response.data else {}
+        new_node_id = new_resource.get("id")
+        return Node(new_node_id, title, description)
 
     def extend_trail(self, current_node: Node, trail: Trail, depth: int):
 
@@ -233,15 +232,23 @@ class Hike:
         new_topics = self.extend_topic(current_node, trail)
 
         for topic in new_topics:
-            new_node_id = f"{self.trailhead_id}_{trail.trail_id}_{trail.get_number_nodes() + 1}"
-            new_node = self.generate_node(topic, new_node_id)
-            self.nodes[new_node_id] = new_node
+            new_node = self.generate_node(topic)
+            self.nodes[new_node.id] = new_node
 
             trail.add_edge([current_node.id, new_node.id])
-            response = self.db.from_("trails").update({"edges": [[current_node.id, new_node.id]]}).eq("id", trail.trail_id).execute()
 
-            if not response.error:
-                self.generate_trail(new_node, trail, depth - 1)
+            row_resp = self.db.from_("trails").select("edges").eq("id", trail.trail_id).execute()
+            if row_resp.data:
+                current_edges = row_resp.data[0].get("edges") or []
+            else:
+                current_edges = []
+
+            current_edges.append([current_node.id, new_node.id])
+
+            response = self.db.from_("trails").update({"edges": current_edges}).eq("id", trail.trail_id).execute()
+            print(f"New node created: {topic}")
+
+            self.extend_trail(new_node, trail, depth - 1)
 
 
 poker_id = "5b212b56-5380-47a8-90d7-b25ef220c2be"
