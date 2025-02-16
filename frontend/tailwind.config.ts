@@ -58,6 +58,7 @@ export default {
       },
       borderWidth: {
         DEFAULT: '2px',
+        '0.5': '1px',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)'],

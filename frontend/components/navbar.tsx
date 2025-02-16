@@ -1,12 +1,18 @@
 'use client';
 
+import { AppContext } from '@/app/layout';
 import { cn } from '@/lib/utils';
-import { BookOpenIcon, MilestoneIcon } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { Button } from './ui/button';
+import { BookOpenIcon, GithubIcon, MilestoneIcon } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useContext, useState } from 'react';
+import { LoginModal } from './login-modal';
+import { Button } from './ui/button';
 
 export default function Navbar() {
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const { appState, setAppState } = useContext(AppContext);
+
   return (
     <div className="flex w-full max-w-52 flex-col pb-2 pt-5">
       {/* Title */}
@@ -27,7 +33,36 @@ export default function Navbar() {
         </Tab>
       </div>
 
-      <Button className="mx-2 mt-auto">Sign in</Button>
+      <div className="divide-y-0.5 border-t-0.5 mt-auto flex flex-col">
+        {appState.login ? (
+          <div className="text-muted-foreground flex items-center justify-between gap-2 px-4 py-4">
+            <p className="-mt-0.5">{appState.login}</p>
+            <Button
+              className="!h-8 !w-16 text-xs"
+              variant="ghost"
+              onClick={() => {
+                setAppState({ ...appState, login: null });
+                localStorage.removeItem('login');
+              }}
+            >
+              Log out
+            </Button>
+          </div>
+        ) : (
+          <Button className="mx-2 my-4" onClick={() => setLoginModalOpen(true)}>
+            Sign in
+          </Button>
+        )}
+        <div className="text-primary flex w-full px-4 py-2 pt-4">
+          <Link
+            className="ml-auto self-end"
+            href="https://github.com/womogenes/trailhead"
+          >
+            <GithubIcon size={18} />
+          </Link>
+        </div>
+      </div>
+      <LoginModal open={loginModalOpen} setOpen={setLoginModalOpen} />
     </div>
   );
 }
