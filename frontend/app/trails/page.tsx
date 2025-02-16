@@ -3,8 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ForceDirectedGraph } from './force-directed-graph';
 import { supabase } from '@/utils/supabase/client';
-import { TreesIcon } from 'lucide-react';
+import { TreesIcon, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { marked } from 'marked';
 
 export default function TrailsPage() {
   const [graphData, setGraphData]: any = useState({ nodes: [], links: [] });
@@ -57,9 +59,10 @@ export default function TrailsPage() {
           ...resources.map((resource) => ({
             id: resource.id,
             label: resource.title,
+            color: trailhead_ids.includes(resource.id) ? '#648053' : null,
             onClick: () => {
               setActiveResource(resource);
-              infoCardRef.current.style.cssText = `left: auto; right: 15px; top: 15px;`;
+              infoCardRef.current.style.cssText = `right: 15px; top: 15px;`;
             },
             onMouseenter: () => {
               setHoveredResource(resource);
@@ -84,17 +87,37 @@ export default function TrailsPage() {
       <div
         className={cn(
           showHoveredResource || activeResource ? 'opacity-100' : 'opacity-0',
-          activeResource && 'h-[calc(100%-30px)] transition-all',
-          'bg-background fixed z-10 w-full max-w-96 rounded-md border px-4 py-3 shadow-sm',
+          activeResource
+            ? 'my-auto h-auto transition-all duration-1000'
+            : 'max-h-96',
+          'bg-background fixed z-10 w-full max-w-96 rounded-md border px-6 py-5 shadow-sm',
         )}
         ref={infoCardRef}
       >
-        <h1 className="mb-2 font-bold leading-tight">
-          {activeResource?.title || hoveredResource?.title}
-        </h1>
-        <p className={cn(!activeResource && 'mb-2 line-clamp-4')}>
-          {activeResource?.description || hoveredResource?.description}
-        </p>
+        <div className="mb-2 flex items-start gap-2">
+          <h1 className="font-bold leading-tight">
+            {activeResource?.title || hoveredResource?.title}
+          </h1>
+          {activeResource && (
+            <Button
+              className="-mt-1.5 ml-auto flex h-8 w-8 shrink-0 rounded-full !p-0"
+              variant="ghost"
+              size="icon"
+              onClick={() => setActiveResource(null)}
+            >
+              <XIcon />
+            </Button>
+          )}
+        </div>
+        <div
+          className={cn(!activeResource && 'mb-2 line-clamp-4 whitespace-pre')}
+          dangerouslySetInnerHTML={{
+            __html: marked.parse(
+              activeResource?.description || hoveredResource?.description || '',
+              { gfm: true },
+            ),
+          }}
+        />
         {!activeResource && (
           <p className="text-muted-foreground text-sm">click to expand</p>
         )}

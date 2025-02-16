@@ -95,7 +95,23 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
       .join('line')
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6)
-      .attr('stroke-width', 1);
+      .attr('stroke-width', 1)
+      .attr('marker-end', 'url(#arrowhead)');
+
+    // Add arrow marker definition
+    svg
+      .append('defs')
+      .append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 20)
+      .attr('refY', 0)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M0,-5L10,0L0,5')
+      .attr('fill', '#999');
 
     // Create a group for nodes and labels
     const nodesGroup = zoomGroup.append('g');

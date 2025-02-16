@@ -30,6 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" />
+        <title>trailhead &bull; learn any skill</title>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
         <div className="bg-muted flex max-h-screen min-h-screen w-full gap-0 overflow-hidden">
