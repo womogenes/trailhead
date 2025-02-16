@@ -13,6 +13,7 @@ def tutorials(topic,media):
 
     url = "https://api.perplexity.ai/chat/completions"
     headers = {"Authorization": "Bearer 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"}
+
     payload = {
         "model": "sonar",
         "messages": [
@@ -22,8 +23,6 @@ def tutorials(topic,media):
                 "Please output a JSON object containing the following fields: {}".format(media_prompt)
             )},
         ],
-        
-    
 
         "response_format": {
                 "type": "json_schema",
@@ -37,18 +36,8 @@ def tutorials(topic,media):
     answer=res[res.index('{'):].strip().removesuffix("```")
     print(answer)
     answer=json.loads(answer)
-    #if(answer[-3:]=="```"):
-    #    answer=answer[:-3]
-    #print(type(answer))
-    #print(answer)
+
+
     res={}
     return answer
-    for i in answer:
-        if(True):#i in topic):
-            #if(answer[i][0].count(' ')>0):
-                #continue
-            res[i]=answer[i]
-    print(res)
-    return res
 
-#tutorials("oil painting",["videos","tutorials","images"])
