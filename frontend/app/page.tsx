@@ -21,6 +21,7 @@ type ChatMessage = {
 
 export default function Home() {
   const searchParams = useSearchParams();
+
   const [query, setQuery] = useState(searchParams.get('query') ?? '');
   const [isWaiting, setIsWaiting] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);

@@ -1,15 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ForceDirectedGraph } from './force-directed-graph';
 import { supabase } from '@/utils/supabase/client';
-import { TreesIcon, XIcon } from 'lucide-react';
+import { ThumbsDownIcon, ThumbsUpIcon, TreesIcon, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { marked } from 'marked';
 import Link from 'next/link';
 
+import { AppContext } from '../layout';
+
 export default function TrailsPage() {
+  const { appState, setAppState } = useContext(AppContext);
+
   const [graphData, setGraphData]: any = useState({ nodes: null, links: null });
   const [activeResource, setActiveResource]: any = useState(null);
   const [hoveredResource, setHoveredResource]: any = useState(null);
@@ -95,13 +99,13 @@ export default function TrailsPage() {
         )}
         ref={infoCardRef}
       >
-        <div className="mb-2 flex items-start gap-2">
+        <div className="flex items-start gap-2">
           <h1 className="font-bold leading-tight">
             {activeResource?.title || hoveredResource?.title}
           </h1>
           {activeResource && (
             <Button
-              className="-mt-1.5 ml-auto flex h-8 w-8 shrink-0 rounded-full !p-0"
+              className="-mr-3 -mt-1.5 ml-auto flex h-8 w-8 shrink-0 rounded-full !p-0"
               variant="ghost"
               size="icon"
               onClick={() => setActiveResource(null)}
@@ -109,6 +113,18 @@ export default function TrailsPage() {
               <XIcon />
             </Button>
           )}
+        </div>
+        <div className="text-muted-foreground my-4 flex gap-2">
+          <p className="text-sm">Rate this resource:</p>
+          <button onClick={() => (appState[activeResource.id].rating = 1)}>
+            <ThumbsUpIcon
+              className={cn(`fill-primary stroke-primary`)}
+              size={16}
+            />
+          </button>
+          <button onClick={() => (appState[activeResource.id].rating = 1)}>
+            <ThumbsDownIcon size={16} />
+          </button>
         </div>
         <div
           className={cn(!activeResource && 'mb-2 line-clamp-4 whitespace-pre')}
