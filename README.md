@@ -35,5 +35,5 @@ Next.js frontend, FastAPI backend
 ### Backend
 
 1. `cd backend`
-2. `pip install -r requirements.txt`
+2. `pip3 install -r requirements.txt`
 3. `fastapi run server.py`
