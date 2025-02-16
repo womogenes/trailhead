@@ -10,9 +10,12 @@ import { marked } from 'marked';
 import Link from 'next/link';
 
 import { AppContext } from '../layout';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/hooks/use-toast';
 
 export default function TrailsPage() {
   const { appState, setAppState } = useContext(AppContext);
+  const { toast } = useToast();
 
   const [graphData, setGraphData]: any = useState({ nodes: null, links: null });
   const [activeResource, setActiveResource]: any = useState(null);
@@ -39,6 +42,10 @@ export default function TrailsPage() {
 
   // Fetch data from supabase
   useEffect(() => {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setActiveResource(null);
+    });
+
     (async () => {
       const trailhead_ids =
         (await supabase.from('trails').select('trailhead_id'))?.data?.map(
@@ -64,7 +71,11 @@ export default function TrailsPage() {
           ...resources.map((resource) => ({
             id: resource.id,
             label: resource.title,
-            color: trailhead_ids.includes(resource.id) ? '#648053' : null,
+            color: trailhead_ids.includes(resource.id)
+              ? '#648053'
+              : resource.image_url
+                ? '#71bf41'
+                : null,
             onClick: () => {
               setActiveResource(resource);
               infoCardRef.current.style.cssText = `right: 15px; top: 15px;`;
@@ -85,6 +96,8 @@ export default function TrailsPage() {
 
   return (
     <div className="relative flex h-full">
+      <Toaster />
+
       <p className="text-foreground absolute z-10 self-start rounded-br-md px-6 py-4 text-2xl font-medium">
         My Trails
       </p>
@@ -93,7 +106,7 @@ export default function TrailsPage() {
         className={cn(
           showHoveredResource || activeResource ? 'opacity-100' : 'opacity-0',
           activeResource
-            ? 'my-auto h-auto transition-all duration-1000'
+            ? 'my-auto max-h-[calc(100vh-30px)] overflow-auto transition-all duration-1000'
             : 'max-h-96',
           'bg-background fixed z-10 w-full max-w-96 rounded-md border px-6 py-5 shadow-sm',
         )}
@@ -119,6 +132,10 @@ export default function TrailsPage() {
           <button
             onClick={() => {
               if (!activeResource) return;
+              toast({
+                title: 'Rating added +1',
+                description: `to resource ${activeResource.id.split('-')[0]}`,
+              });
               setAppState({ ...appState, [activeResource?.id]: { rating: 1 } });
             }}
           >
@@ -134,6 +151,10 @@ export default function TrailsPage() {
           <button
             onClick={() => {
               if (!activeResource) return;
+              toast({
+                title: 'Rating added -1',
+                description: `to resource ${activeResource.id.split('-')[0]}`,
+              });
               setAppState({ ...appState, [activeResource?.id]: { rating: 0 } });
             }}
           >
@@ -147,6 +168,13 @@ export default function TrailsPage() {
             />
           </button>
         </div>
+        {activeResource?.image_url && (
+          <img
+            className="mb-3 rounded-lg"
+            src={activeResource.image_url}
+            alt={activeResource.title}
+          />
+        )}
         <div
           className={cn(!activeResource && 'mb-2 line-clamp-4 whitespace-pre')}
           dangerouslySetInnerHTML={{
@@ -180,12 +208,6 @@ export default function TrailsPage() {
             </div>
           ))}
       </div>
-
-      {/* {activeResource && (
-        <div className="bg-background absolute right-0 top-0 m-2 px-4 py-2">
-          <h1>{activeResource.title}</h1>
-        </div>
-      )} */}
     </div>
   );
 }

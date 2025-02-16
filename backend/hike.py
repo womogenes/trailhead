@@ -43,7 +43,7 @@ class Hike:
         self.preferred_media = user_response.preferred_media_types
         self.preferred_difficulty = user_response.preferred_difficulty
         self.db = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
-        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="o3-mini")
+        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="gpt-4o")
         self.perplexity = PerplexityInterface(api_key=os.getenv("PERPLEXITY_KEY"))
         self.nodes = {}
         self.trails = []
@@ -59,7 +59,7 @@ class Hike:
         else:
             self.db = create_client(url, key)
 
-        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="o3-mini")
+        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="gpt-4o")
         self.perplexity = PerplexityInterface(api_key=os.getenv("PERPLEXITY_KEY"))
         self.nodes = {}
         self.nodes = {self.trailhead_id : self.create_node_from_id(self.trailhead_id)}
