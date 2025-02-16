@@ -1,7 +1,10 @@
-import type { Metadata } from 'next';
+'use client';
+
+import Navbar from '@/components/navbar';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/navbar';
+
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -13,10 +16,10 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
+/* export const metadata: Metadata = {
   title: 'Trailhead',
   description: '[placeholder description, will add later]',
-};
+}; */
 
 export default function RootLayout({
   children,
@@ -32,6 +35,13 @@ export default function RootLayout({
         <div className="bg-muted flex max-h-screen min-h-screen w-full gap-0 overflow-hidden">
           {/* Left sidebar */}
           <Navbar />
+
+          <ProgressBar
+            height="4px"
+            color="#fffd00"
+            options={{ showSpinner: false }}
+            shallowRouting
+          />
 
           <div className="bg-background my-2 mr-2 w-full overflow-auto rounded-md shadow-sm">
             {children}

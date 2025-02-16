@@ -1,7 +1,6 @@
 'use client';
 
 import ChatMessage from '@/components/chat-message';
-import Tag from '@/components/tag';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';

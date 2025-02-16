@@ -39,7 +39,7 @@ function Tab({ children, href }: { children: React.ReactNode; href: string }) {
     <Link
       className={cn(
         pathname === href && 'text-primary font-medium',
-        'flex items-center gap-3 rounded-sm px-4 py-2 transition-colors hover:bg-black/5',
+        'flex items-center gap-3 rounded-sm px-4 py-2 transition-all hover:bg-black/5 active:scale-95',
       )}
       href={href}
     >
