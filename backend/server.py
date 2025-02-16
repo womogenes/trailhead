@@ -2,13 +2,12 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 from pydantic import BaseModel
 from typing import List
 
 from gpt import GPTInterface
-from dotenv import load_dotenv
 import os
 
 load_dotenv()
@@ -39,7 +38,6 @@ async def chat(request: Request):
 
     # Submit the final request
     return generate_query_from_transcript(chat_history)
-
 
 def generate_prereqs(data):
     """
