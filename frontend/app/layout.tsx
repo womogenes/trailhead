@@ -29,11 +29,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-        <div className="bg-muted flex min-h-screen w-full gap-0">
+        <div className="bg-muted flex max-h-screen min-h-screen w-full gap-0 overflow-hidden">
           {/* Left sidebar */}
           <Navbar />
 
-          <div className="bg-background my-2 mr-2 w-full rounded-md">
+          <div className="bg-background my-2 mr-2 w-full overflow-auto rounded-md">
             {children}
           </div>
         </div>

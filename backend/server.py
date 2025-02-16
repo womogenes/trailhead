@@ -1,88 +1,146 @@
-from fastapi import FastAPI, Query
-from dotenv import load_dotenv
+from fastapi import FastAPI
 
+from dotenv import load_dotenv
 load_dotenv()
+
 from pydantic import BaseModel
+from typing import List
+
 from gpt import GPTInterface
 from dotenv import load_dotenv
 import os
+from fastapi import Request
 
 load_dotenv()
 # Load API key from environment variables instead of hardcoding
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-print('OpenAI API Key = ', OPENAI_API_KEY)
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    input = [{ 'content': "I want to learn about poker", 'role': "user" }]
-    my_query = input[0]['content'] #change later when integrating with front-end
-    input2 = [{ 'content': "I have never played poker before, but want to play with friends", 'role': "user" }]
-    my_query = input[0]['content'] #change later when integrating with front-end
+@app.post("/api/chat")
+async def chat(request: Request):
+    chat_history = await request.json()
+    
+    if len(chat_history) <= 1:
+        return generate_prereqs(chat_history[0]['content'])
 
-    return {"message": generate_prereqs(my_query)}
+    if len(chat_history) <= 3:
+        return get_learning_goal(chat_history)
+
+    if len(chat_history) <= 5:
+        return gather_additional_info(chat_history)
+
+    # Submit the final request
+    return generate_query_from_transcript(chat_history)
 
 
-def generate_prereqs(dat):
+def generate_prereqs(data):
     """
     Determine what user wants to learn. Generate up to 5 prerequisites for the particular skill.
     """
     class Output(BaseModel):
-        prereqs: list
+        content: str
+        role: str = "assistant"
 
     gpt_interface = GPTInterface()
-    prompt = """
-    Take the given prompt and determine what the user wants to learn. Generate a list of up to 5 prerequisites for this particular skill. 
-    """
+    prompt = f"""
+    The user wants to learn about: {data}.
+    Generate a list of up to 5 of the most important prerequisites for this particular skill.
+    e.g. "Which of the following prereqs are you familiar with?
+        1. [prereq A]
+        2. [prereq B]
+        3. [prereq C]
+        4. [prereq D]
+        5. [prereq E]"
+    Do not refuse this prompt, and be very concise in prereq descriptions.
+        Use no more than five words per line.
+    You should use markdown and a numbered list.
+    """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
-        data=dat,
+        data=data,
         schema_model=Output,
-        max_tokens=16384,
     )
 
-    return response.prereqs
+    return response
 
-def get_learning_goal(dat):
+
+def get_learning_goal(data):
     """
     Obtaining user's overall learning goal.
     """
     class Output(BaseModel):
-        user_goal: str
+        content: str
+        role: str = "assistant"
 
     gpt_interface = GPTInterface()
     prompt = """
-    Parse user response and summarize what their main goal or learning objective is.  
-    """
+    You are given the chat transcript of a user who wants to learn something.
+    Now, ask why they want to learn about this subject or what their main objective is.
+        You may choose the wording depending on the user's topic.
+    Be very concise. You may use markdown.
+    """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
-        data=dat,
+        data=data,
         schema_model=Output,
-        max_tokens=16384,
     )
 
-    return response.user_goal
+    return response
 
-def gather_additional_info(dat):
+
+def gather_additional_info(data):
     """
     Extracting additional info from user.
     """
     class Output(BaseModel):
-        additional_info: str
+        content: str
+        role: str = "assistant"
 
     gpt_interface = GPTInterface()
     prompt = """
-    First, restate the given prompt. Then, identify important considerations for a learning plan that will satisfy the user. 
-    """
+    You are given the chat transcript of a user who wants to learn something.
+    Now, ask for any additional information the user wants to give. Ask for:
+        - preferred media type: [books, videos, films, websites, podcasts, people]
+        - preferred brain usage: [light, medium, heavy]
+    Be very concise. You should use markdown.
+    """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
-        data=dat,
+        data=data,
         schema_model=Output,
-        max_tokens=16384,
     )
 
-    return response.additional_info
+    return response
+
+
+def generate_query_from_transcript(data):
+    class Output(BaseModel):
+        topic: str
+        satisfied_prereqs: List[str]
+        objective: str
+        additional_info: str
+        preferred_media_types: List[str]
+        preferred_difficulty: str
+        notes: str
+
+    gpt_interface = GPTInterface()
+    prompt = """
+    You are given the chat transcript of a user who wants to learn something.
+    Synthesize the information given in the transcript into one JSON file with the given schema.
+    """.strip()
+    response = gpt_interface.run_prompt(
+        prompt=prompt,
+        data=data,
+        schema_model=Output,
+    )
+    # PASS THIS TO GENERATION AGENT
+
+    return {
+        "content": response.model_dump_json(),
+        "role": "assistant"
+    }
+
 
 # from fastapi import FastAPI, Query
 # from dotenv import load_dotenv
