@@ -23,6 +23,7 @@
     "marked": "^15.0.7",
     "next": "15.1.0",
     "next-nprogress-bar": "^2.4.5",
+    "openai": "^4.85.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.1",

@@ -2,7 +2,7 @@
 
 import { AppContext } from '@/app/layout';
 import { cn } from '@/lib/utils';
-import { BookOpenIcon, GithubIcon, MilestoneIcon } from 'lucide-react';
+import { BookOpenIcon, GithubIcon, MilestoneIcon, LightbulbIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useContext, useState } from 'react';
@@ -30,6 +30,10 @@ export default function Navbar() {
         <Tab href="/trails">
           <MilestoneIcon size={16} />
           <span>Trails</span>
+        </Tab>
+        <Tab href="/recs">
+          <LightbulbIcon size={16} />
+          <span>Sidequests</span>
         </Tab>
       </div>
 

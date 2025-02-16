@@ -127,3 +127,18 @@
 .wind-line:nth-child(even) {
   animation-duration: 10s; /* Different speed for even lines */
 }
+
+/* Remove the previous pixel patterns and replace with these softer styles */
+.garden-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.garden-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.garden-inset {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
