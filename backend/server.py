@@ -1,10 +1,8 @@
 from fastapi import FastAPI, Query
 from dotenv import load_dotenv
 
-load_dotenv()
 from pydantic import BaseModel
 from gpt import GPTInterface
-from dotenv import load_dotenv
 import os
 
 load_dotenv()
@@ -19,7 +17,7 @@ async def root():
     input = [{ 'content': "I want to learn about poker", 'role': "user" }]
     my_query = input[0]['content'] #change later when integrating with front-end
     input2 = [{ 'content': "I have never played poker before, but want to play with friends", 'role': "user" }]
-    my_query = input[0]['content'] #change later when integrating with front-end
+    my_query2 = input2[0]['content'] #change later when integrating with front-end
 
     return {"message": generate_prereqs(my_query)}
 
