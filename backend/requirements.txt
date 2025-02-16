@@ -1,4 +1,5 @@
 fastapi
 supabase
 python-dotenv
-openai==1.63.0
+openai
+requests

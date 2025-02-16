@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { GlobeIcon, MilestoneIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
+import { cn } from '@/lib/utils';
+import { GlobeIcon, MilestoneIcon } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Button } from './ui/button';
+import Link from 'next/link';
 
 export default function Navbar() {
   return (
@@ -35,14 +36,14 @@ function Tab({ children, href }: { children: React.ReactNode; href: string }) {
   const pathname = usePathname();
 
   return (
-    <a
+    <Link
       className={cn(
-        pathname === href && "text-primary font-medium",
-        "flex items-center gap-2 rounded-sm px-4 py-2 transition-colors hover:bg-black/5",
+        pathname === href && 'text-primary font-medium',
+        'flex items-center gap-2 rounded-sm px-4 py-2 transition-colors hover:bg-black/5',
       )}
       href={href}
     >
       {children}
-    </a>
+    </Link>
   );
 }
