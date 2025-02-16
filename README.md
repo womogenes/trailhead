@@ -17,7 +17,8 @@ Education app that creates customized study plans and recommends new material, s
 - beli, but for learning!
 - users can share blog posts detailing their roadmap
 - recommendation system
-  - rl ??
+  - rl
+  - vector embeddings
   - users can specify the breadth/depth of recommendations if they know what they want to learn (or not)
   - Kind of content they want to look at (mathy, requires thinking, very to understand, something before sleeping, etc)
   - form of content (books, articles, videos, webpages)
