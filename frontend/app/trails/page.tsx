@@ -7,9 +7,10 @@ import { TreesIcon, XIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { marked } from 'marked';
+import Link from 'next/link';
 
 export default function TrailsPage() {
-  const [graphData, setGraphData]: any = useState({ nodes: [], links: [] });
+  const [graphData, setGraphData]: any = useState({ nodes: null, links: null });
   const [activeResource, setActiveResource]: any = useState(null);
   const [hoveredResource, setHoveredResource]: any = useState(null);
   const [showHoveredResource, setShowHoveredResource] =
@@ -123,7 +124,7 @@ export default function TrailsPage() {
         )}
       </div>
 
-      {graphData.nodes.length === 0 && (
+      {!graphData.nodes && (
         <div className="mx-auto my-auto flex flex-col gap-2">
           <p>Loading trails...</p>
           <TreesIcon className="mx-auto animate-spin" />
@@ -131,7 +132,16 @@ export default function TrailsPage() {
       )}
 
       <div className="absolute left-0 top-0 h-full w-full">
-        <ForceDirectedGraph data={graphData} />
+        {graphData.nodes &&
+          (graphData.nodes.length > 0 ? (
+            <ForceDirectedGraph data={graphData} />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <p>
+                No trails in database. Try <Link href="/">creating one</Link>.
+              </p>
+            </div>
+          ))}
       </div>
 
       {/* {activeResource && (

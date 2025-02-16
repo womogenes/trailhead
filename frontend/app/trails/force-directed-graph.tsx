@@ -123,6 +123,7 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
       .join('circle')
       .attr('r', 10)
       .attr('fill', (d) => d.color ?? '#c9d9bf')
+      .style('cursor', 'pointer') // Add this line for cursor pointer
       .on('click', (event, d) => d.onClick?.(event, d))
       .on('mouseenter', (event, d) => d.onMouseenter?.(event, d))
       .on('mouseout', (event, d) => d.onMouseout?.(event, d))

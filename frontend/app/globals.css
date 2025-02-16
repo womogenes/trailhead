@@ -73,6 +73,10 @@
   ol li {
     @apply ml-6 list-outside list-decimal pl-2;
   }
+
+  p a {
+    @apply underline underline-offset-4;
+  }
 }
 
 /* Keyframes for the wind animation */
@@ -101,7 +105,7 @@
 
 /* Ensure trees are on top */
 .tree {
-  z-index: 10;  /* Higher than wind lines */
+  z-index: 10; /* Higher than wind lines */
   position: relative;
 }
 
