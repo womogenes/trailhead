@@ -66,4 +66,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  ul li {
+    @apply ml-6 list-outside list-disc pl-2;
+  }
+  ol li {
+    @apply ml-6 list-outside list-decimal pl-2;
+  }
 }

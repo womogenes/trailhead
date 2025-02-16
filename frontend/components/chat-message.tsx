@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils';
+import { marked } from 'marked';
 
 export default function ChatMessage({
-  children,
+  children = '',
   role,
 }: {
   children?: React.ReactNode;
@@ -13,10 +14,10 @@ export default function ChatMessage({
         role === 'user'
           ? 'bg-primary text-muted self-end'
           : 'bg-muted self-start',
-        'relative max-w-96 rounded-2xl px-4 py-2 leading-tight',
+        'relative max-w-lg rounded-2xl px-4 py-1.5',
       )}
     >
-      {children}
+      <div dangerouslySetInnerHTML={{ __html: marked(children as string) }} />
     </div>
   );
 }
