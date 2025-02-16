@@ -14,14 +14,7 @@ class AnswerFormat(BaseModel):
 def tutorials(topic,media):
     #topic should start with topic. and then later have info. Need to learn more about x,y,z. Already know about a,b,c
     #media is list of kinds of media. example  ["books","podcasts","videos"]
-    """"messages": [
-        {"role": "system", "content": "Be precise and concise."},
-        {"role": "user", "content": (
-            "Tell me about Michael Jordan. "
-            "Please output a JSON object containing the following fields: "
-            "first_name, last_name, year_of_birth, num_seasons_in_nba. "
-        )},
-        ],"""
+    
     media_prompt=','.join([i+" links" for i in media])
 
     url = "https://api.perplexity.ai/chat/completions"
