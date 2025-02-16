@@ -2,7 +2,12 @@
 
 import { AppContext } from '@/app/layout';
 import { cn } from '@/lib/utils';
-import { BookOpenIcon, GithubIcon, MilestoneIcon, LightbulbIcon } from 'lucide-react';
+import {
+  BookOpenIcon,
+  GithubIcon,
+  MilestoneIcon,
+  LightbulbIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useContext, useState } from 'react';
@@ -40,7 +45,7 @@ export default function Navbar() {
       <div className="divide-y-0.5 border-t-0.5 mt-auto flex flex-col">
         {appState.login ? (
           <div className="text-muted-foreground flex items-center justify-between gap-2 px-4 py-4">
-            <p className="-mt-0.5">{appState.login}</p>
+            <p className="text-sm">{appState.login}</p>
             <Button
               className="!h-8 !w-16 text-xs"
               variant="ghost"
