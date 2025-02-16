@@ -6,7 +6,9 @@ import * as d3 from 'd3';
 interface Node extends d3.SimulationNodeDatum {
   id: string;
   label: string;
-  onClick?: Function;
+  onClick: Function;
+  onMouseenter: Function;
+  onMouseout: Function;
   color?: string;
 }
 
@@ -29,8 +31,8 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
     // Clear any existing content
     d3.select(svgRef.current).selectAll('*').remove();
 
-    const width = 600;
-    const height = 400;
+    const width = 1200;
+    const height = 800;
 
     // Create SVG
     const svg = d3
@@ -43,7 +45,7 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
     // Configure zoom behavior with smooth transition
     const zoom = d3
       .zoom<SVGSVGElement, unknown>()
-      .scaleExtent([0.5, 2])
+      .scaleExtent([0.4, 2])
       .on('zoom', (event) => {
         zoomGroup
           .transition()
@@ -80,10 +82,10 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
       )
       .force(
         'charge',
-        d3.forceManyBody().strength(-500).distanceMin(30).distanceMax(300),
+        d3.forceManyBody().strength(-100).distanceMin(30).distanceMax(300),
       )
       .force('collision', d3.forceCollide().radius(20).strength(0.7))
-      .force('center', d3.forceCenter(width / 2, height / 2).strength(0.1));
+      .force('center', d3.forceCenter(width / 2, height / 2).strength(1));
 
     // Create the links
     const links = zoomGroup
@@ -103,29 +105,16 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
       .selectAll('circle')
       .data(data.nodes)
       .join('circle')
-      .attr('r', 20)
+      .attr('r', 10)
       .attr('fill', (d) => d.color ?? '#c9d9bf')
-      .on('click', (event, d) => {
-        d.onClick?.(event, d);
-      })
+      .on('click', (event, d) => d.onClick?.(event, d))
+      .on('mouseenter', (event, d) => d.onMouseenter?.(event, d))
+      .on('mouseout', (event, d) => d.onMouseout?.(event, d))
       // @ts-ignore
       .call(drag(simulation));
 
-    // Add labels
-    const labels = nodesGroup
-      .selectAll('text')
-      .data(data.nodes)
-      .join('text')
-      .text((d) => d.label)
-      .attr('class', 'pointer-events-none max-w-20')
-      .attr('font-size', '12px')
-      .attr('fill', '#000')
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
-
     // Set initial positions before simulation starts
     nodes.attr('cx', (d) => d.x!).attr('cy', (d) => d.y!);
-    labels.attr('x', (d) => d.x!).attr('y', (d) => d.y!);
 
     links
       .attr('x1', (d: any) => d.source.x!)
@@ -142,7 +131,6 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
         .attr('y2', (d: any) => d.target.y!);
 
       nodes.attr('cx', (d) => d.x!).attr('cy', (d) => d.y!);
-      labels.attr('x', (d) => d.x!).attr('y', (d) => d.y!);
     });
 
     // Drag functionality
@@ -170,6 +158,9 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
         .on('drag', dragged)
         .on('end', dragended);
     }
+
+    // Run simulation for a while to warm it up
+    for (let i = 0; i < 300; i++) simulation.tick();
 
     return () => {
       simulation.stop();

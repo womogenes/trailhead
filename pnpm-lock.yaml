@@ -14,6 +14,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.48.1
         version: 2.48.1
+      next-nprogress-bar:
+        specifier: ^2.4.5
+        version: 2.4.5
       react-d3-library:
         specifier: ^1.1.8
         version: 1.1.8
@@ -992,6 +995,9 @@ packages:
     resolution: {integrity: sha512-fpoe2T0RbHwBTBUOftAfBPaDEi06ufaUai0mE6Yn1kacc3SnTErfb/h+X94VXzI64rKFHYImXSvdwGGCmwOqCA==}
     engines: {node: '>=0.10.0'}
 
+  next-nprogress-bar@2.4.5:
+    resolution: {integrity: sha512-VkPMp+Cnazu0jpABVFVRTnUxGwFblHVxmBiJoVj4xl5tRw+K6jKqP0GNxACeB1ub0RfxKsVGlZ0HNqkwYjJK+Q==}
+
   node-fetch@1.7.3:
     resolution: {integrity: sha512-NhZ4CsKx7cYm2vSrBAr2PvFOe6sWDf0UYLRqA6svUYg7+/TSfVAu49jYC4BvQ4Sms9SZgdqGBgroqfDhJdTyKQ==}
 
@@ -1001,6 +1007,9 @@ packages:
   normalize-path@2.1.1:
     resolution: {integrity: sha512-3pKJwH184Xo/lnH6oyP1q2pMd7HcypqqmRs91/6/i2CGtWwIKGCkOOMTm/zXbgTEWHw1uNpNi/igc3ePOYHb6w==}
     engines: {node: '>=0.10.0'}
+
+  nprogress-v2@1.1.7:
+    resolution: {integrity: sha512-SvNWhHV+EpgT6x5Eis+QLp137YOedYMZX1TUav2s+J/LkRAOrbq5VcRsnoGiTbWhw21/cjC/WNkBNsbK+bFamQ==}
 
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
@@ -2807,6 +2816,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  next-nprogress-bar@2.4.5:
+    dependencies:
+      nprogress-v2: 1.1.7
+
   node-fetch@1.7.3:
     dependencies:
       encoding: 0.1.13
@@ -2841,6 +2854,8 @@ snapshots:
   normalize-path@2.1.1:
     dependencies:
       remove-trailing-separator: 1.1.0
+
+  nprogress-v2@1.1.7: {}
 
   object-assign@4.1.1: {}
 
