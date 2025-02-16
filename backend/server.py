@@ -107,7 +107,7 @@ def gather_additional_info(data):
     prompt = """
     You are given the chat transcript of a user who wants to learn something.
     Now, ask for any additional information the user wants to give. Ask for:
-        - preferred media type? (websites, videos, books)
+        - preferred media type? (websites, videos, books, podcasts, etc.))
         - preferred intensity? (light, medium, heavy)
     Be very concise. You should use markdown for lists but NOT to bold.
     """.strip()
