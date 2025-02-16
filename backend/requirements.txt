@@ -4,3 +4,4 @@ python-dotenv
 openai==1.63.0
 requests
 beautifulsoup4
+lumaai
