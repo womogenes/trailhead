@@ -37,7 +37,6 @@ class Trail:
             self.edges[end_node] = set()
 
 class Hike:
-
     def __init__(self, user_response):
         self.topic = user_response.topic
         self.prereqs = user_response.satisfied_prereqs
@@ -98,7 +97,6 @@ class Hike:
         return trails
 
     def extract_topics(self, topics_str: str) -> list:
-
         # Use regular expression to find all occurrences of text within double brackets
         topics = re.findall(r'\[\[(.*?)\]\]', topics_str)
         return topics 
@@ -307,7 +305,6 @@ class Hike:
         ).topics
 
         for topic in trail_topics:
-
             payload = {
                 "trail_title": topic,
                 "trailhead_id": self.trailhead_id,

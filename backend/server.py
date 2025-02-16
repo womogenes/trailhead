@@ -109,7 +109,7 @@ def gather_additional_info(data):
     Now, ask for any additional information the user wants to give. Ask for:
         - preferred media type? (websites, videos, books)
         - preferred intensity? (light, medium, heavy)
-    Be very concise. You should use markdown for lists.
+    Be very concise. You should use markdown for lists but NOT to bold.
     """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
@@ -134,8 +134,8 @@ def generate_query_from_transcript(data):
     gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
     prompt = """
     You are given the chat transcript of a user who wants to learn something.
-    Synthesize the information given in the transcript into one JSON file with the given schema. The topic and description
-    should be light-hearted and engaging
+    Synthesize the information given in the transcript into one JSON file with the given schema.
+    The topic and description should be light-hearted and engaging.
     """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
@@ -144,9 +144,11 @@ def generate_query_from_transcript(data):
     )
     
     hike = Hike(response)
+    print(hike)
 
     return {
-        "content": "Generating a custom hike for you...",
+        "content": "Success!",
+        "trailheadId": hike.trailhead_id,
         "role": "assistant"
     }
 
