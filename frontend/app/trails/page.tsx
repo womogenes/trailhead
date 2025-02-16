@@ -116,14 +116,35 @@ export default function TrailsPage() {
         </div>
         <div className="text-muted-foreground my-4 flex gap-2">
           <p className="text-sm">Rate this resource:</p>
-          <button onClick={() => (appState[activeResource.id].rating = 1)}>
+          <button
+            onClick={() => {
+              if (!activeResource) return;
+              setAppState({ ...appState, [activeResource?.id]: { rating: 1 } });
+            }}
+          >
             <ThumbsUpIcon
-              className={cn(`fill-primary stroke-primary`)}
+              className={cn(
+                appState?.[activeResource?.id]?.rating === 1 &&
+                  `fill-primary stroke-primary`,
+                'transition-all',
+              )}
               size={16}
             />
           </button>
-          <button onClick={() => (appState[activeResource.id].rating = 1)}>
-            <ThumbsDownIcon size={16} />
+          <button
+            onClick={() => {
+              if (!activeResource) return;
+              setAppState({ ...appState, [activeResource?.id]: { rating: 0 } });
+            }}
+          >
+            <ThumbsDownIcon
+              className={cn(
+                appState?.[activeResource?.id]?.rating === 0 &&
+                  `fill-primary stroke-primary`,
+                'transition-all',
+              )}
+              size={16}
+            />
           </button>
         </div>
         <div
