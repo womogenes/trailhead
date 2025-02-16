@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 interface Node extends d3.SimulationNodeDatum {
   id: string;
   label: string;
+  onClick?: Function;
   color?: string;
 }
 
@@ -94,33 +95,36 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
       .attr('stroke-opacity', 0.6)
       .attr('stroke-width', 1);
 
+    // Create a group for nodes and labels
+    const nodesGroup = zoomGroup.append('g');
+
     // Create the nodes
-    const nodes = zoomGroup
-      .append('g')
+    const nodes = nodesGroup
       .selectAll('circle')
       .data(data.nodes)
       .join('circle')
       .attr('r', 20)
-      .attr('fill', (d) => d.color ?? '#537a38')
+      .attr('fill', (d) => d.color ?? '#c9d9bf')
+      .on('click', (event, d) => {
+        d.onClick?.(event, d);
+      })
       // @ts-ignore
       .call(drag(simulation));
 
     // Add labels
-    const labels = zoomGroup
-      .append('g')
+    const labels = nodesGroup
       .selectAll('text')
       .data(data.nodes)
       .join('text')
       .text((d) => d.label)
-      .attr('class', 'graph-label pointer-events-none')
+      .attr('class', 'pointer-events-none max-w-20')
       .attr('font-size', '12px')
-      .attr('fill', '#fff')
+      .attr('fill', '#000')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
 
     // Set initial positions before simulation starts
     nodes.attr('cx', (d) => d.x!).attr('cy', (d) => d.y!);
-
     labels.attr('x', (d) => d.x!).attr('y', (d) => d.y!);
 
     links
@@ -138,7 +142,6 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
         .attr('y2', (d: any) => d.target.y!);
 
       nodes.attr('cx', (d) => d.x!).attr('cy', (d) => d.y!);
-
       labels.attr('x', (d) => d.x!).attr('y', (d) => d.y!);
     });
 
@@ -173,9 +176,5 @@ export const ForceDirectedGraph = ({ data }: { data: GraphData }) => {
     };
   }, [data]);
 
-  return (
-    <div className="h-full w-full">
-      <svg ref={svgRef} className="h-full w-full" />
-    </div>
-  );
+  return <svg ref={svgRef} className="h-full w-full" />;
 };
