@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from typing import List
 
 from gpt import GPTInterface
+from hike import Hike
 import os
 
 load_dotenv()
@@ -47,7 +48,7 @@ def generate_prereqs(data):
         content: str
         role: str = "assistant"
 
-    gpt_interface = GPTInterface()
+    gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
     prompt = f"""
     The user wants to learn about: {data}.
     Generate a list of up to 5 of the most important prerequisites for this particular skill.
@@ -78,7 +79,7 @@ def get_learning_goal(data):
         content: str
         role: str = "assistant"
 
-    gpt_interface = GPTInterface()
+    gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
     prompt = """
     You are given the chat transcript of a user who wants to learn something.
     Now, ask why they want to learn about this subject or what their main objective is.
@@ -102,7 +103,7 @@ def gather_additional_info(data):
         content: str
         role: str = "assistant"
 
-    gpt_interface = GPTInterface()
+    gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
     prompt = """
     You are given the chat transcript of a user who wants to learn something.
     Now, ask for any additional information the user wants to give. Ask for:
@@ -122,6 +123,7 @@ def gather_additional_info(data):
 def generate_query_from_transcript(data):
     class Output(BaseModel):
         topic: str
+        topic_description: str
         satisfied_prereqs: List[str]
         objective: str
         additional_info: str
@@ -129,17 +131,19 @@ def generate_query_from_transcript(data):
         preferred_difficulty: str
         notes: str
 
-    gpt_interface = GPTInterface()
+    gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
     prompt = """
     You are given the chat transcript of a user who wants to learn something.
-    Synthesize the information given in the transcript into one JSON file with the given schema.
+    Synthesize the information given in the transcript into one JSON file with the given schema. The topic and description
+    should be light-hearted and engaging
     """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
         data=data,
         schema_model=Output,
     )
-    # PASS THIS TO GENERATION AGENT
+    
+    hike = Hike(response)
 
     return {
         "content": "Generating a custom hike for you...",
@@ -188,7 +192,7 @@ def generate_query_from_transcript(data):
 #     conversation_history.append({"role": "user", "message": query.query})
     
 #     # Generate AI response using GPT interface
-#     gpt_interface = GPTInterface()
+#     gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
 #     prompt = f"User: {query.query}\nAssistant:"
 
 #     # Call the GPT interface to get the response
@@ -227,7 +231,7 @@ def generate_query_from_transcript(data):
 #     """
 #     Determine what user wants to learn. Generate up to 5 prerequisites for the particular skill.
 #     """
-#     gpt_interface = GPTInterface()
+#     gpt_interface = GPTInterface(api_key=os.getenv("OPENAI_KEY"))
 #     prompt = """
 #     Take the given prompt and determine what the user wants to learn. Generate a list of up to 5 prerequisites for this particular skill. 
 #     """
