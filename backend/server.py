@@ -106,9 +106,9 @@ def gather_additional_info(data):
     prompt = """
     You are given the chat transcript of a user who wants to learn something.
     Now, ask for any additional information the user wants to give. Ask for:
-        - preferred media type: [books, videos, films, websites, podcasts, people]
-        - preferred brain usage: [light, medium, heavy]
-    Be very concise. You should use markdown.
+        - preferred media type? (websites, videos, books)
+        - preferred intensity? (light, medium, heavy)
+    Be very concise. You should use markdown for lists.
     """.strip()
     response = gpt_interface.run_prompt(
         prompt=prompt,
@@ -142,7 +142,7 @@ def generate_query_from_transcript(data):
     # PASS THIS TO GENERATION AGENT
 
     return {
-        "content": response.model_dump_json(),
+        "content": "Generating a custom hike for you...",
         "role": "assistant"
     }
 
