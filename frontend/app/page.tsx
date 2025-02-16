@@ -11,7 +11,7 @@ import Image from 'next/image';
 import evergreenTree from '@/public/evergreen_tree.png';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/progress-bar';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type ChatMessage = {
   content: string;
@@ -20,7 +20,8 @@ type ChatMessage = {
 };
 
 export default function Home() {
-  const [query, setQuery] = useState('');
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get('query') ?? '');
   const [isWaiting, setIsWaiting] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const queryInputRef = useRef<any>(null);
