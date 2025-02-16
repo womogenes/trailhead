@@ -74,3 +74,52 @@
     @apply ml-6 list-outside list-decimal pl-2;
   }
 }
+
+/* Keyframes for the wind animation */
+@keyframes wind {
+  0% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateX(25vw) rotate(45deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(50vw) rotate(90deg);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateX(75vw) rotate(135deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(100vw) rotate(180deg);
+    opacity: 0.3;
+  }
+}
+
+/* Ensure trees are on top */
+.tree {
+  z-index: 10;  /* Higher than wind lines */
+  position: relative;
+}
+
+/* Wind line elements */
+.wind-line {
+  position: absolute;
+  width: 150px;
+  height: 1px;
+  border-top: 2px dotted rgba(136, 136, 136, 0.7); /* Dotted line */
+  animation: wind 8s linear infinite; /* Adjust speed and duration */
+  pointer-events: none; /* Ensures it doesn't interfere with interactions */
+  z-index: 5; /* Lower than the trees */
+}
+
+.wind-line:nth-child(odd) {
+  animation-duration: 6s; /* Different speed for odd lines */
+}
+
+.wind-line:nth-child(even) {
+  animation-duration: 10s; /* Different speed for even lines */
+}
