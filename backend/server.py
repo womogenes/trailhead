@@ -215,7 +215,7 @@ def generate_query_from_transcript(data):
 #     conversation_history.append({"role": "assistant", "message": ai_text})
 
 #     # Return the conversation history
-#     return {"conversation_history": conversation_history}
+#      return {"conversation_history": conversation_history}
 
 # @app.get("/conversation/")
 # async def get_conversation():

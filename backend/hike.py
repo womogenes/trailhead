@@ -43,7 +43,7 @@ class Hike:
         self.preferred_media = user_response.preferred_media_types
         self.preferred_difficulty = user_response.preferred_difficulty
         self.db = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
-        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="gpt-4o")
+        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="gpt-4o-mini")
         self.perplexity = PerplexityInterface(api_key=os.getenv("PERPLEXITY_KEY"))
         self.nodes = {}
         self.trails = []
@@ -59,7 +59,7 @@ class Hike:
         else:
             self.db = create_client(url, key)
 
-        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="gpt-4o")
+        self.gpt = GPTInterface(api_key=os.getenv("OPENAI_KEY"), model="gpt-4o-mini")
         self.perplexity = PerplexityInterface(api_key=os.getenv("PERPLEXITY_KEY"))
         self.nodes = {}
         self.nodes = {self.trailhead_id : self.create_node_from_id(self.trailhead_id)}
@@ -148,7 +148,7 @@ class Hike:
         You are currently helping a user learn about {current_trail.title} by finding specific topics that guide the user towards mastery of {current_trail.title}.
         To do this, you will be given two pieces of information: a focus topic and a list of related, prerequisite subjects and their descriptions that the user has already learned.
         Read through the list of topics and how they relate to the focus topic, and then propose several new, related skills and topics that would naturally extend off the focus topic. Limit
-        the number of generated topics to at most 4, but try to keep it at 1 or 2 if possible in order to increase their relevancy.
+        the number of generated topics to at most 2, but try to keep it at 1 or 2 if possible in order to increase their relevancy.
         These topics should be fundamental skills that the user can learn from online resources and builds off the existing skills. These topics should also be unique from one another.
         
         The topics should be a single sentence without any additional description, which is why it needs to be short and concise. Additionally, it should not overlap with any of the existing
@@ -286,7 +286,7 @@ class Hike:
 
         system_role = f"""
         You are currently helping a user with this objective: {user_response.objective}. To do so, you need to find a wide range of topics that can build up to this objective.
-        You will be given a list of topics that the user has already learned, and you need to find at least 5 broad categories that can be used to build up to this objective, which are
+        You will be given a list of topics that the user has already learned, and you need to find at least 3 broad categories that can be used to build up to this objective, which are
         different from one another and interesting to learn. You will also be given some additional information about this user. Each topic should be placed in double brackets for easy parsing.
 
         Format the topics in a JSON file with the given schema.
@@ -315,7 +315,7 @@ class Hike:
             trail_id = new_resource.get("id")
 
             trail = Trail(trail_id, topic)
-            self.extend_trail(self.nodes[self.trailhead_id], trail, 3)
+            self.extend_trail(self.nodes[self.trailhead_id], trail, 1)
 
             self.trails.append(trail)
 

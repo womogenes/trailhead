@@ -6,7 +6,7 @@ class AnswerFormat(BaseModel):
     content_links: str
 
 class PerplexityInterface:
-    def __init__(self, api_key: str = None, model: str = "sonar-pro"):
+    def __init__(self, api_key: str = None, model: str = "sonar"):
         self.client = OpenAI(api_key=api_key, base_url="https://api.perplexity.ai")
         self.model = model
 
